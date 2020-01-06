@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -118,6 +119,15 @@ public class QrCodeImage {
         try {
             ImageIO.write(result, formatName, dest);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public byte[] toByteArray() {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            ImageIO.write(result, "png", out);
+            return out.toByteArray();
+        }catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
