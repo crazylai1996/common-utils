@@ -8,18 +8,14 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.Hashtable;
 
 /**
  * 二维码图片生成
  */
-public class QrCodeImage {
+public class QrCodeImage extends BufferedImageWrap {
 
     private static final int DEFAULT_SIZE = 50;
     private static final int DEFAULT_MARGIN = 0;
@@ -110,30 +106,14 @@ public class QrCodeImage {
         graphics2D.dispose();
     }
 
-    public BufferedImage toBufferedImage() {
-        return result;
-    }
-
-    public void toFile(String fileName, String formatName, String path) {
-        File dest = new File(path, fileName + "." +formatName);
-        try {
-            ImageIO.write(result, formatName, dest);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public byte[] toByteArray() {
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            ImageIO.write(result, "png", out);
-            return out.toByteArray();
-        }catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static QrCodeImageBuilder builder() {
         return QrCodeImageBuilder.aQrCodeImage();
+    }
+
+    @Override
+    public BufferedImage getRealImage() {
+        return result;
     }
 
     public static final class QrCodeImageBuilder {
